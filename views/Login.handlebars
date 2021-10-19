@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+  <body>
+    <h1>Skate Park</h1>
+
+    <div class="py-5">
+      <h2>Iniciar Sesión</h2>
+      <hr class="w-50" />
+
+      <form>
+        <div class="form-group">
+          <div class="form-group">
+            <label>Email</label>
+            <input id= "email" class="form-control w-50 m-auto" />
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id= "password" class="form-control w-50 m-auto" />
+          </div>
+        </div>
+        <button type="button" onclick="verificacion()" id = "boton2" class="btn btn-success mb-3">Ingresar</button>
+        <p>¿Aún no tienes cuenta? <a href="Registro">Regístrate</a></p>
+      </form>
+    </div>
+  </body>
+
+  <script>
+
+// Función de autenticación del login que verifica inputs vs base de datos:
+   const verificacion = async()=>{
+      
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const payload = { email, password }
+
+      // En caso de exito redirige a pantalla "Datos" + el token firmado:
+      try{
+        const { data:token } = await axios.post("/verificar", payload)
+        console.log("me llego el token:" + token)
+        alert("Autenticacion exitosa!");
+        window.location.href = `/Datos?token=${token}`
+        localStorage.setItem('token', JSON.stringify(`${token}`))
+      }
+       catch({response}){
+        const {data}= response
+        const {error}= data
+        alert(error)
+        console.log(error);
+      }
+    }
+      
+  </script>
+
+</html>
+
